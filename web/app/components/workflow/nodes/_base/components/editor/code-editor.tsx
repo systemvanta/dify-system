@@ -7,6 +7,7 @@ type Props = {
   value: string
   onChange: (value: string) => void
   title: JSX.Element
+  language?: string
   headerRight?: JSX.Element
 }
 
