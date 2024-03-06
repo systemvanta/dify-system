@@ -6,7 +6,7 @@ from typing import Optional, Union
 
 from pydantic import BaseModel
 
-from core.app.app_queue_manager import AppQueueManager, PublishFrom
+from core.app.apps.base_app_queue_manager import AppQueueManager, PublishFrom
 from core.app.entities.app_invoke_entities import (
     AdvancedChatAppGenerateEntity,
     InvokeFrom,
@@ -46,6 +46,7 @@ class TaskState(BaseModel):
     """
     answer: str = ""
     metadata: dict = {}
+    usage: LLMUsage
 
 
 class AdvancedChatAppGenerateTaskPipeline:
@@ -349,7 +350,12 @@ class AdvancedChatAppGenerateTaskPipeline:
                     if self._output_moderation_handler.should_direct_output():
                         # stop subscribe new token when output moderation should direct output
                         self._task_state.answer = self._output_moderation_handler.get_final_output()
-                        self._queue_manager.publish_text_chunk(self._task_state.answer, PublishFrom.TASK_PIPELINE)
+                        self._queue_manager.publish(
+                            QueueTextChunkEvent(
+                                text=self._task_state.answer
+                            ), PublishFrom.TASK_PIPELINE
+                        )
+
                         self._queue_manager.publish(
                             QueueStopEvent(stopped_by=QueueStopEvent.StopBy.OUTPUT_MODERATION),
                             PublishFrom.TASK_PIPELINE
@@ -558,5 +564,5 @@ class AdvancedChatAppGenerateTaskPipeline:
                     type=sensitive_word_avoidance.type,
                     config=sensitive_word_avoidance.config
                 ),
-                on_message_replace_func=self._queue_manager.publish_message_replace
+                queue_manager=self._queue_manager
             )
