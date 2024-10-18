@@ -111,11 +111,11 @@ const TagsFilter = ({
                 <div
                   key={option.value}
                   className='flex items-center px-2 py-1.5 h-7 rounded-lg cursor-pointer hover:bg-state-base-hover'
+                  onClick={() => handleCheck(option.value)}
                 >
                   <Checkbox
                     className='mr-1'
                     checked={value.includes(option.value)}
-                    onCheck={() => handleCheck(option.value)}
                   />
                   <div className='px-1 system-sm-medium text-text-secondary'>
                     {option.text}
