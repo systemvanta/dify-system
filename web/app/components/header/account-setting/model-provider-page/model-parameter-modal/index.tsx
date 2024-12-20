@@ -48,6 +48,7 @@ export type ModelParameterModalProps = {
   renderTrigger?: (v: TriggerProps) => ReactNode
   readonly?: boolean
   isInWorkflow?: boolean
+  scope?: string
 }
 const stopParameterRule: ModelParameterRule = {
   default: [],
@@ -84,6 +85,7 @@ const ModelParameterModal: FC<ModelParameterModalProps> = ({
   renderTrigger,
   readonly,
   isInWorkflow,
+  scope = 'text-generation',
 }) => {
   const { t } = useTranslation()
   const { isAPIKeySet } = useProviderContext()
