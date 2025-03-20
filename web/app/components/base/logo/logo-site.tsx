@@ -20,7 +20,7 @@ const LogoSite: FC<LogoSiteProps> = ({
 
   let src = theme === 'light' ? '/logo/logo-site.png' : `/logo/logo-site-${theme}.png`
   if (systemFeatures.branding.enabled)
-    src = systemFeatures.branding.login_page_logo
+    src = systemFeatures.branding.workspace_logo
 
   return (
     <img
