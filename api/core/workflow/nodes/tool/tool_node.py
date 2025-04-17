@@ -73,7 +73,7 @@ class ToolNode(BaseNode[ToolNodeData]):
                     metadata={NodeRunMetadataKey.TOOL_INFO: tool_info},
                     error=f"Failed to get tool runtime: {str(e)}",
                     error_type=type(e).__name__,
-                )
+                ) 
             )
             return
 
