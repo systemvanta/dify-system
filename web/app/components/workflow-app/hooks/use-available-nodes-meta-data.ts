@@ -13,8 +13,6 @@ export const useAvailableNodesMetaData = () => {
   const isChatMode = useIsChatMode()
   const language = useGetLanguage()
 
-  console.log('isChatMode', isChatMode)
-
   const mergedNodesMetaData = useMemo(() => [
     ...WORKFLOW_COMMON_NODES,
     StartDefault,
