@@ -1,7 +1,7 @@
 import type { BaseConfiguration } from '@/app/components/base/form/form-scenarios/base/types'
 import { BaseFieldType } from '@/app/components/base/form/form-scenarios/base/types'
 import { useTranslation } from 'react-i18next'
-import type { FormData } from './options'
+import type { FormData } from '../base/options'
 import { z } from 'zod'
 
 const ERROR_I18N_PREFIX = 'common.errorMsg'
@@ -22,7 +22,7 @@ export const useConfigurations = () => {
         type: BaseFieldType.numberInput,
         variable: 'limit',
         label: t(`${I18N_PREFIX}.limit`),
-        required: false,
+        required: true,
         showConditions: [],
       },
       {
@@ -31,6 +31,7 @@ export const useConfigurations = () => {
         label: t(`${I18N_PREFIX}.maxDepth`),
         required: false,
         showConditions: [],
+        tooltip: t(`${I18N_PREFIX}.maxDepthTooltip`),
       },
       {
         type: BaseFieldType.textInput,

@@ -1,5 +1,4 @@
 'use client'
-import type { FC } from 'react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useModalContextSelector } from '@/context/modal-context'
@@ -7,16 +6,16 @@ import type { CrawlOptions, CrawlResultItem } from '@/models/datasets'
 import { checkFirecrawlTaskStatus, createFirecrawlTask } from '@/service/datasets'
 import { sleep } from '@/utils'
 import Header from '@/app/components/datasets/create/website/base/header'
-import type { FormData } from './options'
-import Options from './options'
-import { useConfigurations } from './hooks'
+import type { FormData } from '../base/options'
+import Options from '../base/options'
+import { useConfigurations, useSchema } from './hooks'
 import Crawling from '../base/crawling'
 import ErrorMessage from '../base/error-message'
 import CrawledResult from '../base/crawled-result'
 
 const I18N_PREFIX = 'datasetCreation.stepOne.website'
 
-type Props = {
+type FireCrawlProps = {
   checkedCrawlResult: CrawlResultItem[]
   onCheckedCrawlResultChange: (payload: CrawlResultItem[]) => void
   onJobIdChange: (jobId: string) => void
@@ -30,17 +29,19 @@ enum Step {
   finished = 'finished',
 }
 
-const FireCrawl: FC<Props> = ({
+const FireCrawl = ({
   checkedCrawlResult,
   onCheckedCrawlResultChange,
   onJobIdChange,
   crawlOptions,
   onCrawlOptionsChange,
-}) => {
+}: FireCrawlProps) => {
   const { t } = useTranslation()
   const [step, setStep] = useState<Step>(Step.init)
   const [controlFoldOptions, setControlFoldOptions] = useState<number>(0)
   const configurations = useConfigurations()
+  const schema = useSchema()
+
   useEffect(() => {
     if (step !== Step.init)
       setControlFoldOptions(Date.now())
@@ -163,6 +164,7 @@ const FireCrawl: FC<Props> = ({
           configurations={configurations}
           isRunning={isRunning}
           controlFoldOptions={controlFoldOptions}
+          schema={schema}
           onSubmit={(value) => {
             handleRun(value)
             console.log('submit')
