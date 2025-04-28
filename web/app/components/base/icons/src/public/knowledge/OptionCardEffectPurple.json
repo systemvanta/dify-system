@@ -17,7 +17,7 @@
 				"attributes": {
 					"id": "Effect",
 					"opacity": "0.8",
-					"filter": "url(#filter0_f_481_16453)"
+					"filter": "url(#filter0_f_5863_82395)"
 				},
 				"children": [
 					{
@@ -42,7 +42,7 @@
 						"type": "element",
 						"name": "filter",
 						"attributes": {
-							"id": "filter0_f_481_16453",
+							"id": "filter0_f_5863_82395",
 							"x": "-156",
 							"y": "-156",
 							"width": "376",
@@ -76,7 +76,7 @@
 								"name": "feGaussianBlur",
 								"attributes": {
 									"stdDeviation": "80",
-									"result": "effect1_foregroundBlur_481_16453"
+									"result": "effect1_foregroundBlur_5863_82395"
 								},
 								"children": []
 							}
