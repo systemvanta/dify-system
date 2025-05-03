@@ -113,6 +113,7 @@ const CreateFromScratch = ({
             icon={appIcon.type === 'image' ? appIcon.fileId : appIcon.icon}
             background={appIcon.type === 'image' ? undefined : appIcon.background}
             imageUrl={appIcon.type === 'image' ? appIcon.url : undefined}
+            showEditIcon
           />
         </div>
         <div className='flex flex-col gap-y-1'>
