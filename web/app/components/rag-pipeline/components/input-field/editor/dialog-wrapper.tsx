@@ -36,7 +36,7 @@ const DialogWrapper = ({
             <TransitionChild>
               <DialogPanel className={cn(
                 'relative flex w-[400px] flex-col overflow-hidden rounded-2xl border-[0.5px] border-components-panel-border bg-components-panel-bg p-0 shadow-xl shadow-shadow-shadow-9 transition-all',
-                'data-[closed]:scale-95  data-[closed]:opacity-0',
+                'data-[closed]:scale-95 data-[closed]:opacity-0',
                 'data-[enter]:scale-100 data-[enter]:opacity-100 data-[enter]:duration-300 data-[enter]:ease-out',
                 'data-[leave]:scale-95 data-[leave]:opacity-0 data-[leave]:duration-200 data-[leave]:ease-in',
                 className,
