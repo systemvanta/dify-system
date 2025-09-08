@@ -17,7 +17,6 @@ type Props = {
   currentTool?: Tool
   currentProvider?: ToolWithProvider
   extraParams?: Record<string, any>
-  providerType?: 'tool' | 'trigger'
 }
 
 const ToolForm: FC<Props> = ({
@@ -30,7 +29,6 @@ const ToolForm: FC<Props> = ({
   currentTool,
   currentProvider,
   extraParams,
-  providerType = 'tool',
 }) => {
   return (
     <div className='space-y-1'>
@@ -47,7 +45,7 @@ const ToolForm: FC<Props> = ({
             currentTool={currentTool}
             currentProvider={currentProvider}
             extraParams={extraParams}
-            providerType={providerType}
+            providerType='tool'
           />
         ))
       }
