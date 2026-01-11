@@ -3,7 +3,10 @@ from __future__ import annotations
 import json
 import logging
 from io import BytesIO
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
+
+from core.sandbox.constants import DIFY_CLI_CONFIG_PATH, DIFY_CLI_PATH
+from core.sandbox.dify_cli import DifyCliConfig
 
 if TYPE_CHECKING:
     from types import TracebackType
@@ -43,15 +46,30 @@ class SandboxSession:
             raise RuntimeError(f"Sandbox not found for workflow_execution_id={self._workflow_execution_id}")
 
         session = InnerApiSessionManager().create(tenant_id=self._tenant_id, user_id=self._user_id)
+        self._session_id = session.id
 
         try:
-            _upload_and_init_dify_cli(sandbox, self._tools, session.id)
+            config = DifyCliConfig.create(self._session_id, self._tools)
+            config_json = json.dumps(config.model_dump(mode="json"), ensure_ascii=False)
+
+            sandbox.upload_file(DIFY_CLI_CONFIG_PATH, BytesIO(config_json.encode("utf-8")))
+
+            connection_handle = sandbox.establish_connection()
+            try:
+                future = sandbox.run_command(connection_handle, [DIFY_CLI_PATH, "init"])
+                result = future.result(timeout=30)
+                if result.exit_code not in (0, None):
+                    stderr = result.stderr.decode("utf-8", errors="replace") if result.stderr else ""
+                    raise RuntimeError(f"Failed to initialize Dify CLI in sandbox: {stderr}")
+            finally:
+                sandbox.release_connection(connection_handle)
+
         except Exception:
             InnerApiSessionManager().delete(session.id)
+            self._session_id = None
             raise
 
         self._sandbox = sandbox
-        self._session_id = session.id
         self._bash_tool = SandboxBashTool(sandbox=sandbox, tenant_id=self._tenant_id)
         return self
 
@@ -82,44 +100,3 @@ class SandboxSession:
         InnerApiSessionManager().delete(self._session_id)
         logger.debug("Cleaned up SandboxSession session_id=%s", self._session_id)
         self._session_id = None
-
-
-def _upload_and_init_dify_cli(sandbox: VirtualEnvironment, tools: list[Tool], session_id: str) -> None:
-    from configs import dify_config
-
-    config = {
-        "env": {
-            "files_url": dify_config.FILES_URL,
-            "inner_api_url": dify_config.CONSOLE_API_URL,
-            "inner_api_session_id": session_id,
-        },
-        "tools": _serialize_tools(tools),
-    }
-
-    config_json = json.dumps(config, ensure_ascii=False)
-    config_path = f"/tmp/dify-init-{session_id}.json"
-
-    sandbox.upload_file(config_path, BytesIO(config_json.encode("utf-8")))
-
-    connection_handle = sandbox.establish_connection()
-    try:
-        future = sandbox.run_command(connection_handle, ["dify", "init", config_path])
-        result = future.result(timeout=30)
-        if result.exit_code != 0:
-            stderr = result.stderr.decode("utf-8", errors="replace") if result.stderr else ""
-            raise RuntimeError(f"Failed to initialize Dify CLI in sandbox: {stderr}")
-    finally:
-        sandbox.release_connection(connection_handle)
-
-
-def _serialize_tools(tools: list[Tool]) -> list[dict[str, Any]]:
-    result: list[dict[str, Any]] = []
-
-    for tool in tools:
-        tool_config = tool.entity.model_dump()
-        tool_config["provider_type"] = tool.tool_provider_type().value
-        tool_config["credential_type"] = tool.runtime.credential_type.value if tool.runtime else "default"
-        tool_config["credential_id"] = tool.runtime.tool_id if tool.runtime else tool.entity.identity.provider
-        result.append(tool_config)
-
-    return result
