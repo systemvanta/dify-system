@@ -1,8 +1,6 @@
-from .assets import AssetItem, FileAsset
-from .packager import AssetPackager, ZipPackager
-from .parser import AssetItemParser, AssetParser, FileAssetParser, SkillAssetParser
-from .paths import AssetPaths
-from .skill import (
+from .entities import (
+    AssetItem,
+    FileAsset,
     FileReference,
     SkillAsset,
     SkillMetadata,
@@ -12,6 +10,9 @@ from .skill import (
     ToolReference,
     ToolType,
 )
+from .packager import AssetPackager, ZipPackager
+from .parser import AssetItemParser, AssetParser, FileAssetParser, SkillAssetParser
+from .paths import AssetPaths
 
 __all__ = [
     "AssetItem",
