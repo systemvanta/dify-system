@@ -17,16 +17,3 @@ export const accessSettingsQueryAtom = atomWithQuery((get) => {
     enabled: Boolean(appInstanceId),
   })
 })
-
-export const developerApiSettingsQueryAtom = atomWithQuery((get) => {
-  const appInstanceId = get(deploymentRouteAppInstanceIdAtom)
-
-  return consoleQuery.enterprise.accessService.getDeveloperApiSettings.queryOptions({
-    input: appInstanceId
-      ? {
-          params: { appInstanceId },
-        }
-      : skipToken,
-    enabled: Boolean(appInstanceId),
-  })
-})

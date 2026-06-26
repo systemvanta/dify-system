@@ -31,12 +31,6 @@ vi.mock('@/service/client', () => ({
             queryKey: ['getAccessSettings', options.input],
           }),
         },
-        getDeveloperApiSettings: {
-          queryOptions: (options: QueryOptions) => ({
-            ...options,
-            queryKey: ['getDeveloperApiSettings', options.input],
-          }),
-        },
       },
     },
   },
@@ -62,18 +56,10 @@ describe('deployment access state', () => {
       enabled: false,
       input: skipToken,
     })
-    expect(store.get(state.developerApiSettingsQueryAtom)).toMatchObject({
-      enabled: false,
-      input: skipToken,
-    })
 
     setDeploymentRoute(store)
 
     expect(store.get(state.accessSettingsQueryAtom)).toMatchObject({
-      enabled: true,
-      input: { params: { appInstanceId: 'app-instance-1' } },
-    })
-    expect(store.get(state.developerApiSettingsQueryAtom)).toMatchObject({
       enabled: true,
       input: { params: { appInstanceId: 'app-instance-1' } },
     })
