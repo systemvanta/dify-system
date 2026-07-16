@@ -19,19 +19,23 @@ class KnowledgeSpace:
         created_at (datetime.datetime):
         id (str):
         name (str):
+        revision (int):
         slug (str):
         tenant_id (str):
         updated_at (datetime.datetime):
         description (str | Unset):
+        icon_ref (str | Unset):
     """
 
     created_at: datetime.datetime
     id: str
     name: str
+    revision: int
     slug: str
     tenant_id: str
     updated_at: datetime.datetime
     description: str | Unset = UNSET
+    icon_ref: str | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -41,6 +45,8 @@ class KnowledgeSpace:
 
         name = self.name
 
+        revision = self.revision
+
         slug = self.slug
 
         tenant_id = self.tenant_id
@@ -49,6 +55,8 @@ class KnowledgeSpace:
 
         description = self.description
 
+        icon_ref = self.icon_ref
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -56,6 +64,7 @@ class KnowledgeSpace:
                 "createdAt": created_at,
                 "id": id,
                 "name": name,
+                "revision": revision,
                 "slug": slug,
                 "tenantId": tenant_id,
                 "updatedAt": updated_at,
@@ -63,6 +72,8 @@ class KnowledgeSpace:
         )
         if description is not UNSET:
             field_dict["description"] = description
+        if icon_ref is not UNSET:
+            field_dict["iconRef"] = icon_ref
 
         return field_dict
 
@@ -75,6 +86,8 @@ class KnowledgeSpace:
 
         name = d.pop("name")
 
+        revision = d.pop("revision")
+
         slug = d.pop("slug")
 
         tenant_id = d.pop("tenantId")
@@ -83,14 +96,18 @@ class KnowledgeSpace:
 
         description = d.pop("description", UNSET)
 
+        icon_ref = d.pop("iconRef", UNSET)
+
         knowledge_space = cls(
             created_at=created_at,
             id=id,
             name=name,
+            revision=revision,
             slug=slug,
             tenant_id=tenant_id,
             updated_at=updated_at,
             description=description,
+            icon_ref=icon_ref,
         )
 
         knowledge_space.additional_properties = d
