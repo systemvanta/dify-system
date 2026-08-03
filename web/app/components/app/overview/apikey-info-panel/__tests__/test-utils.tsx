@@ -39,8 +39,10 @@ const mockUseProviderContext = actualUseProviderContext as MockedFunction<
 // Default mock data
 const defaultProviderContext = {
   modelProviders: [],
+  modelProviderPlugins: {},
   refreshModelProviders: noop,
   isLoadingModelProviders: false,
+  isSuccessModelProviders: false,
   textGenerationModelList: [],
   isAPIKeySet: false,
   plan: defaultPlan,
